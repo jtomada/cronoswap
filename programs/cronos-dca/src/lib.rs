@@ -32,6 +32,40 @@ pub mod cronos_dca {
     }
 }
 
+// quote amount comes from constant product curve
+// https://web.stanford.edu/~guillean/papers/uniswap_analysis.pdf
+fn div_ceiling(numerator: u128, denominator: u128) -> u128 {
+    if numerator % denominator == 0 { 
+        numerator / denominator 
+    } else { 
+        numerator / denominator + 1 
+    }
+}
+
+fn get_constant_product_output_amount(
+    input_pool_balance: u64,
+    output_pool_balance: u64,
+    input_amount: u64,
+) -> u64 {
+    let rsrv_b: u128 = From::from(input_pool_balance);
+    let rsrv_a: u128 = From::from(output_pool_balance);
+    let delta_b: u128 = From::from(input_amount);
+
+    let orca_fee = (30, 10000);
+
+    let fee_delta_b = div_ceiling(delta_b * orca_fee.0, orca_fee.1);
+    let delta_b_postfee = delta_b - fee_delta_b;
+
+    let k = rsrv_b * rsrv_a;
+    let rsrv_b_posttrade = rsrv_b + delta_b_postfee;
+    let rsrv_a_posttrade = div_ceiling(k, rsrv_b_posttrade);
+
+    let delta_a = rsrv_a - rsrv_a_posttrade;
+
+    let expected_oa_u64: u64 = TryFrom::try_from(delta_a).unwrap();
+    expected_oa_u64
+}
+
 #[account]
 #[derive(Default)]
 pub struct DcaConfig {
