@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::*;
+use anchor_spl::token::Mint;
 
 declare_id!("H8LECSL9wE5HVVs1jAYoixq1MBsvoiRVrCvfiTbRA8Xo");
 
@@ -24,6 +24,12 @@ pub mod cronos_dca {
 
         Ok(())
     }
+
+    pub fn swap(
+        ctx: Context<Swap>,
+    ) -> Result<()> {
+        Ok(())
+    }
 }
 
 #[account]
@@ -42,5 +48,11 @@ pub struct Initialize<'info> {
     pub dca_account: Account<'info, DcaConfig>,
     pub input_mint: Account<'info, Mint>,
     pub output_mint: Account<'info, Mint>,
+    pub owner: Signer<'info>
+}
+
+#[derive(Accounts)]
+pub struct Swap<'info> {
+    pub dca_account: Account<'info, DcaConfig>,
     pub owner: Signer<'info>
 }
