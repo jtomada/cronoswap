@@ -1,13 +1,13 @@
 [features]
 seeds = false
 [programs.localnet]
-cronos_dca = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+cronos_dca = "H8LECSL9wE5HVVs1jAYoixq1MBsvoiRVrCvfiTbRA8Xo"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/home/jay/.config/solana/id.json"
 
 [scripts]

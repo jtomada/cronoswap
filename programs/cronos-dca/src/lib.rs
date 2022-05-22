@@ -1,7 +1,8 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::*;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("H8LECSL9wE5HVVs1jAYoixq1MBsvoiRVrCvfiTbRA8Xo");
+
 
 #[program]
 pub mod cronos_dca {
@@ -11,12 +12,16 @@ pub mod cronos_dca {
         ctx: Context<Initialize>,
         amount: f64,
         slippage: f64,
+        cron: String,
     ) -> Result<()> {
-        ctx.accounts.dca_account.input_mint = ctx.accounts.input_mint.key();
-        ctx.accounts.dca_account.output_mint = ctx.accounts.output_mint.key();
-        ctx.accounts.dca_account.amount = amount;
-        ctx.accounts.dca_account.slippage = slippage;
+        let dca = &mut ctx.accounts.dca_account;
+        dca.input_mint = ctx.accounts.input_mint.key();
+        dca.output_mint = ctx.accounts.output_mint.key();
+        dca.amount = amount;
+        dca.slippage = slippage;
+        dca.cron = cron;
         msg!("initialized input mint, output mint, amount, slippage");
+
         Ok(())
     }
 }
@@ -28,6 +33,7 @@ pub struct DcaConfig {
     output_mint: Pubkey,
     amount: f64,
     slippage: f64,
+    cron: String,
 }
 
 #[derive(Accounts)]
