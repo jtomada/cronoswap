@@ -1,5 +1,9 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::Mint;
+use solana_program::{
+    instruction::Instruction,
+    pubkey,
+};
 
 declare_id!("H8LECSL9wE5HVVs1jAYoixq1MBsvoiRVrCvfiTbRA8Xo");
 
@@ -22,14 +26,23 @@ pub mod cronos_dca {
         dca.cron = cron;
         msg!("initialized input mint, output mint, amount, slippage");
 
+        // get swap instruction
+
+        // then send it through the cronos scheduler
+
         Ok(())
     }
 
-    pub fn swap(
-        ctx: Context<Swap>,
+    pub fn stop_and_delete(
+        ctx: Context<StopAndDelete>,
     ) -> Result<()> {
         Ok(())
     }
+}
+
+fn swap(dca_account: Account<DcaConfig>) -> Result<()> {
+    // return instruction here back to initialize
+    Ok(())
 }
 
 // quote amount comes from constant product curve
@@ -82,11 +95,12 @@ pub struct Initialize<'info> {
     pub dca_account: Account<'info, DcaConfig>,
     pub input_mint: Account<'info, Mint>,
     pub output_mint: Account<'info, Mint>,
-    pub owner: Signer<'info>
+    pub owner: Signer<'info>,
 }
 
 #[derive(Accounts)]
-pub struct Swap<'info> {
+pub struct StopAndDelete<'info> {
+    #[account(mut)]
     pub dca_account: Account<'info, DcaConfig>,
-    pub owner: Signer<'info>
+    pub owner: Signer<'info>,
 }
